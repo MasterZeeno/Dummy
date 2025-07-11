@@ -157,8 +157,8 @@ build_fancy() {
         if [[ -n "${install_cmd:-}" ]]; then
           $SUDO $install_cmd -S "${opts[@]}" "$pkg" &>/dev/null
         else
-          git clone --quiet -o "$pkgdir" "https://aur.archlinux.org/${pkg}.git" &>/dev/null
-          cd "$pkgdir" &>/dev/null && makepkg -si --skippgpcheck "${opts[@]}" &>/dev/null
+          git clone --quiet -o "$pkgdir" "https://aur.archlinux.org/${pkg}.git" # &>/dev/null
+          cd "$pkgdir" &>/dev/null && makepkg -si --skippgpcheck "${opts[@]}" # &>/dev/null
         fi
         [[ $? -ne 0 ]] && status="failed"; ((retry++)); ((retry>3)) && break
       done
