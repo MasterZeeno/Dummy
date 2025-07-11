@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -x
+set -x
 
 if [ -z "${BASH_VERSION:-}" ]; then
   printf $' \e[0;2;31m\UF00D %s\e[1;31m%s\e[0;31m%s\e[0m\n' \
