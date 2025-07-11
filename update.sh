@@ -293,7 +293,7 @@ if ! printf '%s\n' "$CURRENT_VERSION" "$LATEST_VERSION" | sort -V | tail -n1 | g
     awk 'BEGIN{n=0}/^ *$/{n++}n>=1' "$FUNCS_SH" >> "$BUILD_SH"
     
     if [[ -s "$BUILD_SH" ]]; then
-      cd "$MAIN_DIR" && git add .
+      cd "$MAIN_DIR" && gh_login && git add .
       if ! git diff --cached --quiet; then
         git commit --quiet -m "Bumped: v$LATEST_VERSION"
         git push --quiet
