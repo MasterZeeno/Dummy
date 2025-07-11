@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+# set -x
 
 if [ -z "${BASH_VERSION:-}" ]; then
   printf $' \e[0;2;31m\UF00D %s\e[1;31m%s\e[0;31m%s\e[0m\n' \
@@ -182,6 +182,16 @@ build_fancy() {
 }
 
 gh_login() {
+  [[ -f "$HOME/.gitconfig" ]] || touch "$HOME/.gitconfig"
+  for url in https://{,gist.}github.com; do
+    if ! grep "$url" "$HOME/.gitconfig"; then
+      {
+        echo "[credential \"$url\"]"
+        echo "  helper = "
+        echo "  helper = !$(which gh) auth git-credential"
+      } >> "$HOME/.gitconfig"
+    fi
+  done
   if [[ "$(gh api user --jq .login)" != "$USER_NAME" ]]; then
     gh auth logout &>/dev/null
     
