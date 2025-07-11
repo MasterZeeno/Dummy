@@ -1,7 +1,8 @@
 #!/bin/bash
 
 if [ -z "${BASH_VERSION:-}" ]; then
-  echo "The 'update.sh' script must be run from a 'bash' shell."
+  printf $' \e[0;2;31m\UF00D %s\e[0;1;31m%s\e[0;2;31m%s\e[0;1;31m%s\e[0;2;31m%s\e[0m\n' \
+    "The '" "update.sh" "' script must be run from a '" "bash" "' shell"
   return 64 2>/dev/null || exit 64
 fi
 
@@ -23,7 +24,8 @@ for v in {user,src,build}.{name,repo,email} {funcs,build,update}.sh; do
     eval "${var^^}=$val"
   else
     if [[ $v =~ \.sh$ || $v =~ ^[usb]*(name|repo)$ || $v =~ ^u*email$ ]]; then
-      echo "Variable '$var' is necessary, provide a valid value."
+      printf $' \e[0;31m\UF00D %s\e[1;31m%s\e[0;31m%s\e[0m\n' \
+        "Variable '" "$var" "' is necessary, provide a valid value"
       return 1 2>/dev/null || exit 1
     fi
   fi
@@ -90,14 +92,13 @@ install_pkgs() {
 get_ver() { ([[ -f "$1" ]] && cat "$1" || echo "$1") | grep -iom1 'version[ =].*' | grep -Eo '[0-9.]+'; }
 print_update_msg() {
   local msg="${1:?}" slp="${2:-0}" bmsg="$USER_NAME/$USER_REPO"
-  # [[ -z "${LATEST_VERSION:-}" ]] || bmsg+=" to v$LATEST_VERSION"
   
   FANCY_ARGS=(--no-print)
   [[ "${msg,,}" =~ ^updated ]] && \
     FANCY_ARGS+=(--preset=success) || \
       FANCY_ARGS+=(--color=36)
   
-  echo
+  clear
   fancy_print -n +d "${msg^}:"
   FANCY_ARGS+=(--no-icon)
   if [[ -z "${LATEST_VERSION:-}" ]]; then
