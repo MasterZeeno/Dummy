@@ -184,7 +184,7 @@ build_fancy() {
 gh_login() {
   [[ -f "$HOME/.gitconfig" ]] || touch "$HOME/.gitconfig"
   for url in https://{,gist.}github.com; do
-    if ! grep "$url" "$HOME/.gitconfig"; then
+    if ! grep -q "$url" "$HOME/.gitconfig"; then
       {
         echo "[credential \"$url\"]"
         echo "  helper = "
