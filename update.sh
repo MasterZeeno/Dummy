@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ -z "${BASH_VERSION:-}" ]; then
-  printf $' \e[0;2;31m\UF00D %s\e[0;1;31m%s\e[0;2;31m%s\e[0;1;31m%s\e[0;2;31m%s\e[0m\n' \
-    "The '" "update.sh" "' script must be run from a '" "bash" "' shell"
+  printf $' \e[0;2;31m\UF00D %s\e[1;31m%s\e[0;31m%s\e[0m\n' \
+    "The '" "update.sh" "' script must be run from a 'bash' shell."
   return 64 2>/dev/null || exit 64
 fi
 
@@ -145,6 +145,10 @@ build_fancy() {
       fi
     done
     
+        
+    : "${TMPDIR:=/tmp}"
+    mkdir -p "$TMPDIR"
+    
     for pkg in "${pkgs[@]}"; do
       local status="success" retry=0 pkgdir="$TMPDIR/$pkg"
       while ! pacman -Q "$pkg" &>/dev/null; do
@@ -265,9 +269,6 @@ update_script() {
 
 FORCE_UPDATE="${1:-}"
 update_script
-
-: "${TMPDIR:=/tmp}"
-mkdir -p "$TMPDIR"
 
 SRC_TOML=$(curl -fsSL "https://raw.githubusercontent.com/$SRC_NAME/$SRC_REPO/refs/heads/master/Cargo.toml")
 LATEST_VERSION=$(get_ver "$SRC_TOML") CURRENT_VERSION=0
